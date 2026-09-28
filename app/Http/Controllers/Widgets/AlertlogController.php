@@ -42,14 +42,6 @@ class AlertlogController extends WidgetController
         'hidenavigation' => 0,
     ];
 
-    public function getView(Request $request): View
-    {
-        $data = $this->getSettings();
-        $data['time_intervals'] = $this->timeIntervals($data['time_interval']);
-
-        return view('widgets.alertlog', $data);
-    }
-
     public function getSettingsView(Request $request): View
     {
         $data = $this->getSettings(true);
@@ -61,28 +53,5 @@ class AlertlogController extends WidgetController
         ];
 
         return view('widgets.settings.alertlog', $data);
-    }
-
-    /**
-     * Time ranges offered by the widget dropdown, in days. A saved value outside
-     * the fixed set is included so the widget still offers what is configured.
-     *
-     * @return array<string, int>
-     */
-    private function timeIntervals(mixed $configured): array
-    {
-        $intervals = [
-            'Last 24 hours' => 1,
-            'Last 3 days' => 3,
-            'Last 7 days' => 7,
-            'Last 30 days' => 30,
-        ];
-
-        if (is_numeric($configured) && ! in_array((int) $configured, $intervals)) {
-            $intervals[__('Last :days days', ['days' => (int) $configured])] = (int) $configured;
-            asort($intervals);
-        }
-
-        return $intervals;
     }
 }
