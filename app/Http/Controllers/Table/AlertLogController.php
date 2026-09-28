@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Table;
 
 use App\Http\Parsers\AlertLogDetailParser;
 use App\Models\AlertLog;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ class AlertLogController extends TableController
             'device_id' => 'integer|nullable',
             'device_group' => 'integer|nullable',
             'state' => 'integer|nullable',
+            'time_interval' => 'integer|nullable',
         ];
     }
 
@@ -65,6 +67,11 @@ class AlertLogController extends TableController
             'device_group' => function ($q, ?int $group_id): void {
                 if ($group_id) {
                     $q->inDeviceGroup($group_id);
+                }
+            },
+            'time_interval' => function (Builder $q, ?int $days): void {
+                if ($days) {
+                    $q->where('alert_log.time_logged', '>', Carbon::now()->subDays($days));
                 }
             },
             'state',

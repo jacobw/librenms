@@ -1,4 +1,13 @@
 <div id="alertlog_container-{{ $id }}" data-reload="false">
+    <div class="text-right" style="margin-bottom: 5px;">
+        <select class="form-control input-sm" id="alertlog_time_interval-{{ $id }}"
+                style="width: auto; display: inline-block;" aria-label="{{ __('Time range') }}">
+            <option value="">{{ __('All time') }}</option>
+            @foreach($time_intervals as $label => $days)
+                <option value="{{ $days }}" @if((int) $time_interval === $days) selected @endif>{{ __($label) }}</option>
+            @endforeach
+        </select>
+    </div>
     <div class="table-responsive">
         <table id="alertlog_{{ $id }}" class="table table-hover table-condensed alerts" data-url="{{ route('table.alertlog') }}">
             <thead>
@@ -24,6 +33,7 @@
                     device_group: "{{ $device_group }}",
                     state: '{{ $state }}',
                     severity: @json($severity),
+                    time_interval: $('#alertlog_time_interval-{{ $id }}').val(),
                 };
             },
             converters: {
@@ -55,6 +65,10 @@
                     }
                 });
             });
+        });
+
+        $('#alertlog_time_interval-{{ $id }}').on('change', function () {
+            grid.bootgrid('reload');
         });
 
         $('#alertlog_container-{{ $id }}').on('refresh', function (event) {
