@@ -22,6 +22,10 @@
         </select>
     </div>
     <div class="form-group">
+        <label for="time_interval-{{ $id }}" class="control-label">{{ __('Last days') }}</label>
+        <input class="form-control" name="time_interval" id="time_interval-{{ $id }}" placeholder="{{ __('All time') }}" value="{{ $time_interval }}">
+    </div>
+    <div class="form-group">
         <label for="device_group-{{ $id }}" class="control-label">{{ __('Device group') }}</label>
         <select class="form-control" name="device_group" id="device_group-{{ $id }}" data-placeholder="{{ __('All Devices') }}">
             @if($device_group)
